@@ -4,7 +4,7 @@ import math
 
 def main():
     st.set_page_config(page_title="Calculator", page_icon="🧮")
-    st.title("Nate's Simple Calculator")
+    st.title("Nate's Simple Python Calculator")
 
     # Custom CSS for modern, premium look
     st.markdown("""
@@ -19,7 +19,7 @@ def main():
             color: #ffffff !important;
         }
         
-        /* Button styling */
+        /* Base Button styling (Numbers - Dark Grey) */
         div.stButton > button {
             background-color: #2d2d2d;
             color: #ffffff;
@@ -42,9 +42,56 @@ def main():
             transform: translateY(1px);
         }
 
-        /* Accent buttons (operators) - Using nth-child approximation or just general style */
-        /* Currently universal style, but dark grey is sleek */
+        /* ----- Function Buttons (Light Blue) ----- */
+        /* ----- Function Buttons (Light Blue) ----- */
+        /* Row 1 (Index 4): Cols 4, 5 (/, ^) */
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(4) [data-testid="stColumn"]:nth-of-type(4) button,
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(4) [data-testid="stColumn"]:nth-of-type(5) button {
+            background-color: #4facfe !important;
+            border-color: #4facfe !important;
+        }
 
+        /* Row 2 (Index 5): Cols 4, 5 (*, sqrt) */
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(5) [data-testid="stColumn"]:nth-of-type(4) button,
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(5) [data-testid="stColumn"]:nth-of-type(5) button {
+            background-color: #4facfe !important;
+            border-color: #4facfe !important;
+        }
+
+        /* Row 3 (Index 6): Cols 4, 5 (-, log) */
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(6) [data-testid="stColumn"]:nth-of-type(4) button,
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(6) [data-testid="stColumn"]:nth-of-type(5) button {
+            background-color: #4facfe !important;
+            border-color: #4facfe !important;
+        }
+
+        /* Row 4 (Index 7): Cols 1 (C), 4 (+), 5 (sin) */
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(7) [data-testid="stColumn"]:nth-of-type(1) button,
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(7) [data-testid="stColumn"]:nth-of-type(4) button,
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(7) [data-testid="stColumn"]:nth-of-type(5) button {
+            background-color: #4facfe !important;
+            border-color: #4facfe !important;
+        }
+
+        /* Row 5 (Index 8): All Cols (cos, tan, pi, e) */
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(8) button {
+             background-color: #4facfe !important;
+             border-color: #4facfe !important;
+        }
+
+        /* ----- Equals Button (Bright Blue) ----- */
+        /* Row 4 (Index 7): Col 3 (=) */
+        div[data-testid="stVerticalBlock"] > div:nth-of-type(7) [data-testid="stColumn"]:nth-of-type(3) button {
+            background-color: #007AFF !important;
+            border-color: #007AFF !important;
+            font-weight: bold;
+        }
+
+        /* Hover effects for Blue buttons */
+        div[data-testid="column"] button[style*="background-color: #4facfe"]:hover { 
+            background-color: #63b2ff !important; 
+        }
+        
         /* Display Screen styling */
         .calc-display {
             background-color: #000000;
