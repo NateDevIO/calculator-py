@@ -1,117 +1,165 @@
 import streamlit as st
 from calculator import Calculator
 import math
+import base64
+
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
 
 def main():
-    st.set_page_config(page_title="Calculator", page_icon="🧮")
-    st.title("Nate's Simple Python Calculator")
+    st.set_page_config(page_title="Catculator", page_icon="🐱")
+    st.title("Catculator")
+    
+    # Load background image
+    try:
+        bin_str = get_base64_of_bin_file("cat_bg.png")
+    except Exception:
+        st.error("Could not load cat background.")
+        bin_str = ""
 
-    # Custom CSS for modern, premium look
+    # Custom CSS for Catculator (Grid and Buttons)
     st.markdown("""
         <style>
-        /* Main background */
+        /* Lock everything to fixed dimensions */
         .stApp {
-            background-color: #1e1e1e;
+            background-color: #87CEEB !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            min-height: 100vh !important;
         }
 
-        /* Title styling */
-        h1, .stTitle {
-            color: #ffffff !important;
-        }
-        
-        /* Base Button styling (Numbers - Lighter Grey) */
-        div.stButton > button {
-            background-color: #3d3d3d;
-            color: #ffffff;
-            border-radius: 15px;
-            border: 1px solid #4d4d4d;
-            height: 60px;
-            font-size: 20px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-        
-        div.stButton > button:hover {
-            background-color: #4d4d4d;
-            border-color: #666;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        .block-container {
+            position: relative !important;
+            width: 450px !important;
+            height: 800px !important;
+            max-width: 450px !important;
+            max-height: 800px !important;
+            min-width: 450px !important;
+            min-height: 800px !important;
+            padding: 0 !important;
+            margin: 20px auto !important;
+            background-image: url("data:image/png;base64,__BG_IMAGE_B64__");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            overflow: hidden !important;
         }
 
-        /* ... (omit intermediate unchanged chunks if possible, but replace_file_content needs contiguous block. 
-           Wait, there are many lines between base button and equals.
-           I should definitely use multi_replace for this to avoid replacing the big block of function selectors.
-        */
-        
-        div.stButton > button:active {
-            transform: translateY(1px);
+        /* Hide default Streamlit title and padding */
+        h1, .stTitle { display: none !important; }
+        .stMainBlockContainer { padding: 0 !important; }
+
+        /* Catculator Title - Positioned at top */
+        .catculator-title {
+            position: absolute !important;
+            top: 10px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            font-family: 'Comic Sans MS', cursive, sans-serif !important;
+            font-size: 36px !important;
+            font-weight: bold !important;
+            color: #663300 !important;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.8) !important;
+            z-index: 1001 !important;
+            white-space: nowrap !important;
+            display: inline-block !important;
         }
 
-        /* ----- Function Buttons (Light Blue) ----- */
-        /* ----- Function Buttons (Light Blue) ----- */
-        /* Row 1 (Index 4): Cols 4, 5 (/, ^) */
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(4) [data-testid="stColumn"]:nth-of-type(4) button,
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(4) [data-testid="stColumn"]:nth-of-type(5) button {
-            background-color: #4facfe !important;
-            border-color: #4facfe !important;
-        }
-
-        /* Row 2 (Index 5): Cols 4, 5 (*, sqrt) */
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(5) [data-testid="stColumn"]:nth-of-type(4) button,
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(5) [data-testid="stColumn"]:nth-of-type(5) button {
-            background-color: #4facfe !important;
-            border-color: #4facfe !important;
-        }
-
-        /* Row 3 (Index 6): Cols 4, 5 (-, log) */
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(6) [data-testid="stColumn"]:nth-of-type(4) button,
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(6) [data-testid="stColumn"]:nth-of-type(5) button {
-            background-color: #4facfe !important;
-            border-color: #4facfe !important;
-        }
-
-        /* Row 4 (Index 7): Cols 1 (C), 4 (+), 5 (sin) */
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(7) [data-testid="stColumn"]:nth-of-type(1) button,
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(7) [data-testid="stColumn"]:nth-of-type(4) button,
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(7) [data-testid="stColumn"]:nth-of-type(5) button {
-            background-color: #4facfe !important;
-            border-color: #4facfe !important;
-        }
-
-        /* Row 5 (Index 8): All Cols (cos, tan, pi, e) */
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(8) button {
-             background-color: #4facfe !important;
-             border-color: #4facfe !important;
-        }
-
-        /* ----- Equals Button (Darker Blue) ----- */
-        /* Row 4 (Index 7): Col 3 (=) */
-        div[data-testid="stVerticalBlock"] > div:nth-of-type(7) [data-testid="stColumn"]:nth-of-type(3) button {
-            background-color: #0056b3 !important;
-            border-color: #0056b3 !important;
-            font-weight: bold;
-        }
-
-        /* Hover effects for Blue buttons */
-        div[data-testid="column"] button[style*="background-color: #4facfe"]:hover { 
-            background-color: #63b2ff !important; 
-        }
-        
-        /* Display Screen styling */
+        /* Display Screen - Absolutely positioned on cat's forehead */
         .calc-display {
-            background-color: #000000;
-            color: #ffffff;
-            padding: 20px;
-            border-radius: 15px;
-            font-size: 42px;
-            font-family: 'Roboto', sans-serif;
-            text-align: right;
-            margin-bottom: 25px;
-            border: 1px solid #333;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+            position: absolute !important;
+            top: 165px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            width: 250px !important;
+            height: 55px !important;
+
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            color: #333 !important;
+            padding: 8px 15px !important;
+            border-radius: 15px !important;
+            font-size: 28px !important;
+            font-family: 'Comic Sans MS', sans-serif !important;
+            font-weight: bold !important;
+            text-align: right !important;
+            border: 3px solid #663300 !important;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3) !important;
+            z-index: 1000 !important;
+
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            overflow: hidden !important;
+        }
+
+        /* Large invisible spacer to push buttons down to belly */
+        .belly-spacer {
+            height: 340px !important;
+            min-height: 340px !important;
+            max-height: 340px !important;
+        }
+
+        /* Force Grid Alignment */
+        div[data-testid="stHorizontalBlock"] {
+            flex-wrap: nowrap !important;
+            white-space: nowrap !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            margin-bottom: 6px !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+        }
+
+        div[data-testid="stColumn"] {
+            min-width: 64px !important;
+            max-width: 64px !important;
+            flex: 0 0 64px !important;
+        }
+
+        /* Button styling */
+        div[data-testid="stColumn"] button {
+            width: 60px !important;
+            height: 60px !important;
+            min-height: 60px !important;
+            max-height: 60px !important;
+            border-radius: 50% !important;
+            padding: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: 2px solid rgba(0,0,0,0.3) !important;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4) !important;
+            font-size: 20px !important;
+            font-weight: bold !important;
+            margin: 0 auto !important;
+            cursor: pointer !important;
+        }
+
+        /* Number buttons - Brown */
+        button[kind="secondary"], div[data-testid="baseButton-secondary"] > button {
+            background-color: #A0522D !important;
+            color: white !important;
+            border-color: #5D4037 !important;
+        }
+
+        /* Function buttons - Blue */
+        button[kind="primary"], div[data-testid="baseButton-primary"] > button {
+            background-color: #6495ED !important;
+            color: white !important;
+            border-color: #004085 !important;
+        }
+
+        /* Equals button - Darker blue */
+        div[data-testid="stHorizontalBlock"]:nth-of-type(4) [data-testid="stColumn"]:nth-of-type(3) button {
+            background-color: #4169E1 !important;
+            border-color: #002a80 !important;
         }
         </style>
-    """, unsafe_allow_html=True)
+    """.replace("__BG_IMAGE_B64__", bin_str), unsafe_allow_html=True)
+
 
     # Initialize calculator logic
     calc = Calculator()
@@ -201,8 +249,11 @@ def main():
              st.session_state.reset_next = True
 
     # UI Layout
-    
-    # Display Screen
+
+    # Title (Absolutely positioned at top)
+    st.markdown('<div class="catculator-title">🐱 Catculator 🐱</div>', unsafe_allow_html=True)
+
+    # Display Screen (Absolutely positioned on forehead)
     st.markdown(
         f"""
         <div class="calc-display">
@@ -212,47 +263,49 @@ def main():
         unsafe_allow_html=True
     )
 
+    # Spacer to push buttons down to cat's belly
+    st.markdown('<div class="belly-spacer"></div>', unsafe_allow_html=True)
+
     # Grid Layout - 5 columns for Scientific Calculator
     # Row 1: 7, 8, 9, /, ^ (Power)
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.button("7", on_click=input_number, args=('7',), use_container_width=True)
-    c2.button("8", on_click=input_number, args=('8',), use_container_width=True)
-    c3.button("9", on_click=input_number, args=('9',), use_container_width=True)
-    c4.button("÷", on_click=set_operator, args=('/',), use_container_width=True)
-    c5.button("^", on_click=set_operator, args=('^',), use_container_width=True)
+    c1.button("7", on_click=input_number, args=('7',))
+    c2.button("8", on_click=input_number, args=('8',))
+    c3.button("9", on_click=input_number, args=('9',))
+    c4.button("÷", on_click=set_operator, args=('/',), type="primary")
+    c5.button("^", on_click=set_operator, args=('^',), type="primary")
 
     # Row 2: 4, 5, 6, *, √ (Sqrt)
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.button("4", on_click=input_number, args=('4',), use_container_width=True)
-    c2.button("5", on_click=input_number, args=('5',), use_container_width=True)
-    c3.button("6", on_click=input_number, args=('6',), use_container_width=True)
-    c4.button("×", on_click=set_operator, args=('*',), use_container_width=True)
-    c5.button("√", on_click=unary_operation, args=(calc.sqrt,), use_container_width=True)
+    c1.button("4", on_click=input_number, args=('4',))
+    c2.button("5", on_click=input_number, args=('5',))
+    c3.button("6", on_click=input_number, args=('6',))
+    c4.button("×", on_click=set_operator, args=('*',), type="primary")
+    c5.button("√", on_click=unary_operation, args=(calc.sqrt,), type="primary")
 
     # Row 3: 1, 2, 3, -, log
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.button("1", on_click=input_number, args=('1',), use_container_width=True)
-    c2.button("2", on_click=input_number, args=('2',), use_container_width=True)
-    c3.button("3", on_click=input_number, args=('3',), use_container_width=True)
-    c4.button("−", on_click=set_operator, args=('-',), use_container_width=True)
-    c5.button("log", on_click=unary_operation, args=(calc.log,), use_container_width=True)
+    c1.button("1", on_click=input_number, args=('1',))
+    c2.button("2", on_click=input_number, args=('2',))
+    c3.button("3", on_click=input_number, args=('3',))
+    c4.button("−", on_click=set_operator, args=('-',), type="primary")
+    c5.button("log", on_click=unary_operation, args=(calc.log,), type="primary")
 
-    # Row 4: C, 0, =, +, Const (pi, e - simplified to just constants inputs for now or maybe trig)
-    # Let's do Trig: sin, cos, tan
+    # Row 4: C, 0, =, +, sin
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.button("C", on_click=clear, use_container_width=True)
-    c2.button("0", on_click=input_number, args=('0',), use_container_width=True)
-    c3.button("=", on_click=calculate, use_container_width=True)
-    c4.button("＋", on_click=set_operator, args=('+',), use_container_width=True)
-    c5.button("sin", on_click=unary_operation, args=(calc.sin,), use_container_width=True)
+    c1.button("C", on_click=clear)
+    c2.button("0", on_click=input_number, args=('0',))
+    c3.button("=", on_click=calculate, type="primary")
+    c4.button("＋", on_click=set_operator, args=('+',), type="primary")
+    c5.button("sin", on_click=unary_operation, args=(calc.sin,), type="primary")
 
     # Row 5: Extra Scientific: cos, tan, pi, e
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.button("cos", on_click=unary_operation, args=(calc.cos,), use_container_width=True)
-    c2.button("tan", on_click=unary_operation, args=(calc.tan,), use_container_width=True)
-    c3.button("π", on_click=input_number, args=(math.pi,), use_container_width=True)
-    c4.button("e", on_click=input_number, args=(math.e,), use_container_width=True)
-    # Empty 5th button or could be something else
+    c1.button("cos", on_click=unary_operation, args=(calc.cos,), type="primary")
+    c2.button("tan", on_click=unary_operation, args=(calc.tan,), type="primary")
+    c3.button("π", on_click=input_number, args=(math.pi,), type="primary")
+    c4.button("e", on_click=input_number, args=(math.e,), type="primary")
+    # Empty 5th button
     c5.empty()
 
 if __name__ == "__main__":
