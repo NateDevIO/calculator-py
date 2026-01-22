@@ -1,8 +1,6 @@
 # 🐱 Catculator 🐱
 
-Welcome to the **Catculator**! The cutest scientific calculator on the web. 
-
-This project combines powerful mathematical capabilities with an adorable feline interface. Calculate constants, trigonometry, and basic math right on the belly of a friendly cat!
+A whimsical cat-themed scientific calculator web app featuring an adorable feline interface with paw-pad buttons.
 
 ## ✨ Features
 
@@ -27,39 +25,21 @@ This project combines powerful mathematical capabilities with an adorable feline
 ## 🛠️ Tech Stack
 
 *   **HTML/CSS/JavaScript**: Static web version (recommended for deployment).
-*   **Python + Streamlit**: Original version.
 *   **CSS**: Custom styling with animations.
 
-## 🚀 Deploy to Vercel (Recommended)
+## 🚀 Deployment
 
-The static version (`index.html`, `styles.css`, `script.js`) can be deployed to Vercel for free hosting with no sleep issues:
+This is a static web application (`index.html`, `styles.css`, `script.js`). You can deploy it to any static hosting service like Vercel, Netlify, or GitHub Pages.
 
-1.  **Push to GitHub** (if not already done).
+### Vercel (Recommended)
+
+1.  **Push to GitHub**.
 2.  **Import to Vercel**: Go to [vercel.com](https://vercel.com), click "New Project", and import your repo.
 3.  **Deploy**: Vercel auto-detects static sites. Click Deploy!
 
-Your Catculator will be live 24/7 with no sleep notifications! 🎉
-
 ## 🏠 Run Locally
 
-### Static Version (Open in Browser)
 Simply open `index.html` in your web browser.
-
-### Streamlit Version
-```bash
-git clone https://github.com/NateDevIO/calculator-py.git
-cd calculator-py
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-## 🧪 Testing
-
-To run the unit tests for the calculator logic:
-
-```bash
-python -m unittest test_calculator.py
-```
 
 ## 👨‍💻 Author
 
