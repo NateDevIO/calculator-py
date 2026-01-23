@@ -95,7 +95,10 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll from floating elements */
+    width: 100%;
+    position: relative;
     font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
@@ -135,13 +138,15 @@ body {
 /* Calculator Container */
 .calculator-container {
     position: relative;
-    width: 450px;
+    width: 100%;
+    max-width: 450px;
     height: 800px;
     background-image: url("cat_bg.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: top center;
     z-index: 1;
+    margin: 0 auto;
 }
 
 /* Catculator Title */
@@ -315,4 +320,70 @@ body {
     background: rgba(255, 255, 255, 0.6);
     padding: 5px 15px;
     border-radius: 15px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    body {
+        display: block;
+        height: auto;
+        overflow-y: auto;
+        /* allow vertical scroll */
+    }
+
+    .calculator-container {
+        width: 95%;
+        height: 95vh;
+        max-height: 800px;
+        background-size: contain;
+        margin: 10px auto;
+    }
+
+    .catculator-title {
+        font-size: 28px;
+        top: 20px;
+    }
+
+    .calc-display {
+        width: 85%;
+        top: 160px;
+        font-size: 24px;
+        height: 50px;
+    }
+
+    .cat-reaction {
+        top: -30px;
+        right: -10px;
+        font-size: 26px;
+    }
+
+    .belly-spacer {
+        height: 48vh;
+        /* Use viewport height to position buttons on belly relative to screen */
+        min-height: 380px;
+    }
+
+    .button-grid {
+        padding: 0 10px;
+    }
+
+    .btn {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+
+    .btn-placeholder {
+        width: 45px;
+        height: 45px;
+    }
+
+    .footer-credit {
+        position: static;
+        /* Unfix footer on mobile so it flows naturally */
+        transform: none;
+        margin: 20px auto 10px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.8);
+    }
 }
