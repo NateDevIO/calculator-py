@@ -62,20 +62,6 @@
     }
 }
 
-@keyframes button-press {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(0.9);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -95,11 +81,11 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden;
-    /* Prevent horizontal scroll from floating elements */
     width: 100%;
-    position: relative;
+    margin: 0;
     font-family: 'Comic Sans MS', cursive, sans-serif;
+    overflow-x: hidden;
+    /* Prevent horizontal scroll */
 }
 
 /* Floating decorations */
@@ -135,68 +121,109 @@ body {
     animation: wiggle 2s ease-in-out infinite;
 }
 
-/* Calculator Container */
+/* Calculator Container - SCALABLE HUB */
 .calculator-container {
     position: relative;
-    width: 100%;
-    max-width: 450px;
-    height: 800px;
+
+    /* Responsive Sizing Logic */
+    width: min(95vw, 450px);
+    /* Max 450px, scales down on mobile */
+    aspect-ratio: 450 / 800;
+    /* Lock Aspect Ratio */
+    height: auto;
+    /* Height driven by width + aspect ratio */
+
     background-image: url("cat_bg.png");
     background-size: 100% 100%;
+    /* Stretch background exact to container */
     background-repeat: no-repeat;
-    background-position: top center;
+    background-position: center;
     z-index: 1;
-    margin: 0 auto;
+    margin: auto;
+
+    /* Container Query for Font Scaling */
+    container-type: inline-size;
 }
 
 /* Catculator Title */
 .catculator-title {
     position: absolute;
-    top: 10px;
+    top: 1.25%;
+    /* 10px / 800px */
     left: 50%;
     transform: translateX(-50%);
+
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    font-size: 38px;
+    font-size: 8.5cqi;
+    /* Container Query Inline size ~ 38px/450px */
     font-weight: bold;
     color: #663300;
+
     text-shadow:
-        2px 2px 0px #fff,
-        -2px -2px 0px #fff,
-        2px -2px 0px #fff,
-        -2px 2px 0px #fff,
+        2px 2px 0px #fff, -2px -2px 0px #fff,
+        2px -2px 0px #fff, -2px 2px 0px #fff,
         3px 3px 6px rgba(0, 0, 0, 0.3);
     z-index: 1001;
     white-space: nowrap;
     animation: title-bounce 2s ease-in-out infinite;
 }
 
+/* Fallback for browsers without container queries */
+@supports not (container-type: inline-size) {
+    .catculator-title {
+        font-size: 7vw;
+    }
+
+    @media (min-width: 450px) {
+        .catculator-title {
+            font-size: 38px;
+        }
+    }
+}
+
+
 /* Display Screen */
 .calc-display {
     position: absolute;
-    top: 195px;
+    top: 24.375%;
+    /* 195px / 800px - Adjusted to sit perfectly on eyes */
     left: 50%;
     transform: translateX(-50%);
-    width: 250px;
-    height: 55px;
+
+    width: 55.5%;
+    /* 250px / 450px */
+    height: 6.875%;
+    /* 55px / 800px */
+
     background: linear-gradient(145deg, #fffef5 0%, #fff8dc 100%);
     color: #333;
-    padding: 8px 15px;
+    padding: 0 4%;
+    /* Responsive padding */
     border-radius: 15px;
-    font-size: 28px;
+
+    font-size: 6cqi;
+    /* Responsive Text */
     font-family: 'Comic Sans MS', sans-serif;
     font-weight: bold;
     text-align: right;
     border: 3px solid #8B4513;
     animation: pulse-glow 2s ease-in-out infinite;
     z-index: 1000;
+
     display: flex;
     align-items: center;
     justify-content: flex-end;
     overflow: visible;
 }
 
+@supports not (container-type: inline-size) {
+    .calc-display {
+        font-size: 24px;
+    }
+}
+
 #display {
-    max-width: 220px;
+    max-width: 90%;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -204,9 +231,11 @@ body {
 /* Cat reaction emoji */
 .cat-reaction {
     position: absolute;
-    top: -40px;
-    right: -25px;
-    font-size: 32px;
+    top: -80%;
+    /* Relative to display height */
+    right: -10%;
+    font-size: 120%;
+    /* Relative to display font size */
     z-index: 1002;
     animation: wiggle 0.5s ease-in-out;
     filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
@@ -214,49 +243,64 @@ body {
 
 /* Belly Spacer */
 .belly-spacer {
-    height: 515px;
+    height: 64.375%;
+    /* 515px / 800px - Pushes buttons to start at correct Y pos */
+    width: 100%;
 }
 
 /* Button Grid */
 .button-grid {
-    padding: 0 20px;
+    padding: 0 4%;
+    width: 100%;
 }
 
 .button-row {
     display: flex;
     justify-content: center;
-    gap: 6px;
-    margin-bottom: 6px;
+    gap: 1.5%;
+    /* Responsive gap */
+    margin-bottom: 1.5%;
 }
 
-/* Button styling - Paw pad style */
+/* Button styling */
 .btn {
-    width: 50px;
-    height: 50px;
+    width: 11.1%;
+    /* ~50px / 450px */
+    aspect-ratio: 1 / 1;
+    /* Square buttons */
+
     border-radius: 45% 45% 50% 50%;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.2);
     box-shadow:
         0 4px 8px rgba(0, 0, 0, 0.3),
         inset 0 2px 4px rgba(255, 255, 255, 0.3),
         inset 0 -2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 20px;
+
+    font-size: 4.5cqi;
+    /* Responsive font */
     font-weight: bold;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     transition: all 0.15s ease;
-    cursor: inherit;
+    cursor: pointer;
+}
+
+@supports not (container-type: inline-size) {
+    .btn {
+        font-size: 18px;
+    }
 }
 
 .btn-placeholder {
-    width: 60px;
-    height: 60px;
+    width: 11.1%;
+    aspect-ratio: 1 / 1;
     visibility: hidden;
 }
 
-/* Number buttons - Brown paw pad gradient */
+/* Number buttons */
 .btn-number {
     background: linear-gradient(145deg, #CD853F 0%, #A0522D 50%, #8B4513 100%);
     color: white;
@@ -267,20 +311,15 @@ body {
 .btn-number:hover {
     background: linear-gradient(145deg, #DEB887 0%, #CD853F 50%, #A0522D 100%);
     transform: scale(1.1);
-    box-shadow:
-        0 6px 15px rgba(0, 0, 0, 0.4),
-        inset 0 2px 4px rgba(255, 255, 255, 0.4),
-        0 0 20px rgba(255, 200, 100, 0.5);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 200, 100, 0.5);
 }
 
 .btn-number:active {
     transform: scale(0.95);
-    box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.3),
-        inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Function buttons - Coral/salmon paw pad gradient */
+/* Function buttons */
 .btn-function {
     background: linear-gradient(145deg, #FFA07A 0%, #FA8072 50%, #E9967A 100%);
     color: white;
@@ -291,99 +330,36 @@ body {
 .btn-function:hover {
     background: linear-gradient(145deg, #FFB6A0 0%, #FFA07A 50%, #FA8072 100%);
     transform: scale(1.1);
-    box-shadow:
-        0 6px 15px rgba(0, 0, 0, 0.4),
-        inset 0 2px 4px rgba(255, 255, 255, 0.4),
-        0 0 20px rgba(255, 200, 100, 0.5);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 200, 100, 0.5);
 }
 
 .btn-function:active {
     transform: scale(0.95);
-    box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.3),
-        inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Footer credit */
+/* Footer credit - Position relative to container */
 .footer-credit {
-    position: fixed;
-    bottom: 15px;
+    position: absolute;
+    bottom: 2%;
+    /* 15px / 800px approx */
     left: 50%;
     transform: translateX(-50%);
+
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    font-size: 14px;
+    font-size: 3cqi;
     color: #663300;
     opacity: 0.8;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.9);
     z-index: 9999;
     white-space: nowrap;
     background: rgba(255, 255, 255, 0.6);
-    padding: 5px 15px;
+    padding: 0.5% 1.5%;
     border-radius: 15px;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 600px) {
-    body {
-        display: block;
-        height: auto;
-        overflow-y: auto;
-        /* allow vertical scroll */
-    }
-
-    .calculator-container {
-        width: 95%;
-        height: 95vh;
-        max-height: 800px;
-        background-size: contain;
-        margin: 10px auto;
-    }
-
-    .catculator-title {
-        font-size: 28px;
-        top: 20px;
-    }
-
-    .calc-display {
-        width: 85%;
-        top: 160px;
-        font-size: 24px;
-        height: 50px;
-    }
-
-    .cat-reaction {
-        top: -30px;
-        right: -10px;
-        font-size: 26px;
-    }
-
-    .belly-spacer {
-        height: 48vh;
-        /* Use viewport height to position buttons on belly relative to screen */
-        min-height: 380px;
-    }
-
-    .button-grid {
-        padding: 0 10px;
-    }
-
-    .btn {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
-    }
-
-    .btn-placeholder {
-        width: 45px;
-        height: 45px;
-    }
-
+@supports not (container-type: inline-size) {
     .footer-credit {
-        position: static;
-        /* Unfix footer on mobile so it flows naturally */
-        transform: none;
-        margin: 20px auto 10px;
-        text-align: center;
-        background: rgba(255, 255, 255, 0.8);
+        font-size: 12px;
     }
 }
