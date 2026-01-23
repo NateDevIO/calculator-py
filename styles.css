@@ -243,8 +243,8 @@ body {
 
 /* Belly Spacer */
 .belly-spacer {
-    height: 64.375%;
-    /* 515px / 800px - Pushes buttons to start at correct Y pos */
+    height: 62%;
+    /* Reduced from 64.375% to prevent footer overlap */
     width: 100%;
 }
 
@@ -257,9 +257,9 @@ body {
 .button-row {
     display: flex;
     justify-content: center;
-    gap: 1.5%;
-    /* Responsive gap */
-    margin-bottom: 1.5%;
+    gap: 1.2%;
+    /* Slightly tighter layout */
+    margin-bottom: 1.2%;
 }
 
 /* Button styling */
